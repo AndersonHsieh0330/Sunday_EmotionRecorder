@@ -130,17 +130,12 @@ public class lightbulbfragment extends Fragment {
         is_service_bounded_lightfrag = false;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("statustest", "onCreateView: ");
 
         View v = inflater.inflate(R.layout.fragment_lightbulb, container, false);
+        //////////////////initial check////////////////////////////
         sqlitehelper = new dbhelper(this.getActivity());
         recycle_linkedlist = sqlitehelper.view_data();
 
@@ -188,8 +183,9 @@ public class lightbulbfragment extends Fragment {
             }
         };
         light_imagebutton.setOnClickListener(listen_1);
+        light_imagebutton.setEnabled(sp.getBoolean("Emotion_ready",true));
 
-        if(is_emotion_ready_lightfrag){
+        if(sp.getBoolean("Emotion_ready",true)){
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_default);
         }else{
         if(sp.getInt("latest_emotion_count",0)==1){
@@ -198,9 +194,6 @@ public class lightbulbfragment extends Fragment {
         }else if(sp.getInt("latest_emotion_count",0)==2){
             Log.d("statustest", "2 ");
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_bad_painted);
-        }else{
-            Log.d("statustest", "none ");
-            light_imagebutton.setBackgroundResource(R.drawable.lightbulb_default_white);
         }}
 
 
@@ -214,7 +207,7 @@ public class lightbulbfragment extends Fragment {
             }
         };
         add_button.setOnClickListener(listen_2);
-
+        add_button.setEnabled(sp.getBoolean("Emotion_ready",true));
 
         return v;
     }
@@ -244,6 +237,9 @@ public class lightbulbfragment extends Fragment {
             recycle_linkedlist = sqlitehelper.view_data();
             adapter.notifyDataSetChanged();
             currentservice.cooldown_cycle(sp.getInt("Latency", 0));
+            add_button.setEnabled(false);
+            light_imagebutton.setEnabled(false);
+            is_emotion_ready_lightfrag =false;
 
 
             speditor.putInt("latest_emotion_count",lightbulb_icon_count);
@@ -259,6 +255,10 @@ public class lightbulbfragment extends Fragment {
             currentservice.cooldown_cycle(sp.getInt("Latency", 0));
             speditor.putInt("latest_emotion_count",lightbulb_icon_count);
             speditor.commit();
+            add_button.setEnabled(false);
+            light_imagebutton.setEnabled(false);
+            is_emotion_ready_lightfrag =false;
+
         } else {
             Toast.makeText(this.getActivity(), "Click on lightbult to select a emotion", Toast.LENGTH_SHORT).show();
         }

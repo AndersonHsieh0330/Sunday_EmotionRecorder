@@ -27,10 +27,10 @@ public class Notification_receiver_happy extends BroadcastReceiver {
         broadcast_intent.setAction("emotion_notready_from_notification");
         broadcast_intent.putExtra("Notification_pressed",true);
         context.sendBroadcast(broadcast_intent);
+
         Intent count_status_intent = new Intent();
         count_status_intent.setAction("emotion_actionfilter");
         count_status_intent.putExtra("light_status_count",intent.getIntExtra("emotion",3));
         context.sendBroadcast(count_status_intent);
-        Log.d("statustest","broadcast_sent");
     }
 }

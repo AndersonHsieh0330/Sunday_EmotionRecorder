@@ -26,14 +26,15 @@ public class background_service extends Service {
     private boolean is_service_bounded_service;//keep track in both lightbulbfragment and service
     private boolean is_emotion_ready_service;//keep track in both lightbulbfragment and service
     private int current_count_down;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor speditor;
     public boolean isIs_emotion_ready_service() {
         return is_emotion_ready_service;
     }
-
-
     public int getCurrent_count_down() {
         return current_count_down;
     }
+
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -43,10 +44,7 @@ public class background_service extends Service {
                 if(intent.getBooleanExtra("Notification_pressed",false)){
                     SharedPreferences sp = context.getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
                     cooldown_cycle(sp.getInt("Latency", 0));
-//                    Intent lightbulb_status_notification_inetnt = new Intent();
-//                    lightbulb_status_notification_inetnt.setAction("emotion_actionfilter");
-//                    lightbulb_status_notification_inetnt.putExtra("light_status_count",intent.getIntExtra("light_status_count",3) );
-//                    sendBroadcast(lightbulb_status_notification_inetnt);
+
                 }
             }
         }
@@ -56,13 +54,14 @@ public class background_service extends Service {
     public class localbinder extends Binder{
         background_service getService(){
             return background_service.this;
-            /////////////// 這裡的bindService.this return的是甚麼? 是外部class的物件嗎?
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sp = getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
+        speditor= sp.edit();
         notificationManager = NotificationManagerCompat.from(this);
 
         IntentFilter filter= new IntentFilter("emotion_notready_from_notification");
@@ -102,10 +101,13 @@ public class background_service extends Service {
             @Override
             public void onTick(long millisUntilFinished) {
                 current_count_down = current_count_down -1000;
-                Intent broadcast = new Intent();
-                broadcast.setAction("emotion_actionfilter");
-                broadcast.putExtra("emotion_ready",false);
-                sendBroadcast(broadcast);
+//                Intent broadcast = new Intent();
+//                broadcast.setAction("emotion_actionfilter");
+//                broadcast.putExtra("emotion_ready",false);
+//                sendBroadcast(broadcast);
+                speditor.putBoolean("Emotion_ready",false);
+                speditor.commit();
+
             }
 
             @Override
@@ -116,10 +118,11 @@ public class background_service extends Service {
                 sendBroadcast(intent);
                 is_emotion_ready_service = true;
 
-                SharedPreferences sp = getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
                 if(sp.getBoolean("Notification_onoroff",false)){
                     send_notifications();
                 }
+                speditor.putBoolean("Emotion_ready",true);
+                speditor.commit();
             }
         };
 
