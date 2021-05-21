@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Beige">
+
+    <Button
+        android:id="@+id/terms_policies_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="86dp"
+        android:background="@color/transparent"
+        android:text="@string/terms_policies"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/contributions_credits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/transparent"
+        android:text="@string/contributions_credits"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/terms_policies_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="150dp"
+        android:text="@string/notification"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/notification_switch"
+        android:checked="true"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="40dp"
+        android:scaleX="1.75"
+        android:scaleY="1.75"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:text="Hello, User!"
+        android:textSize="35sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/instruction_button"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/instructions_string"
+        app:layout_constraintBottom_toTopOf="@+id/contributions_credits"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/transparent"/>
+
+    <TextView
+        android:id="@+id/Latency_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/latency"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <ImageButton
+        android:id="@+id/latency_information_button"        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/information_white"
+        app:layout_constraintBottom_toBottomOf="@+id/Latency_text"
+        app:layout_constraintStart_toEndOf="@+id/Latency_text"
+        app:layout_constraintTop_toTopOf="@+id/Latency_text" />
+
+    <Spinner
+        android:id="@+id/latency_spinner"
+        android:layout_width="136dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="45dp"
+        android:backgroundTint="@color/transparent"
+        android:popupBackground="@color/Beige"
+        app:layout_constraintBottom_toBottomOf="@+id/Latency_text"
+        app:layout_constraintStart_toEndOf="@+id/Latency_text"
+        app:layout_constraintTop_toTopOf="@+id/Latency_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

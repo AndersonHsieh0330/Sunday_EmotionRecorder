@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/Beige">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/lightbulb_button"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:background="@drawable/lightbulb_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.424"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/add_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/addicon_state"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.92"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
+        <TextClock
+            android:id="@+id/textclock"
+            android:layout_width="340dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/add_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+        </TextClock>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lightbulb_list"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_weight="3"
+        android:paddingBottom="56dp"
+        ></androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>
