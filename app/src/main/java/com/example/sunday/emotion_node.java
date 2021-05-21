@@ -10,6 +10,7 @@ import java.util.Calendar;
 public class emotion_node {
 
         private Calendar cal;
+        private int Year;
         private int Month;
         private int Date;
         private int hr;
@@ -20,6 +21,7 @@ public class emotion_node {
             ////////////when creating a node, user only needs to input a calendar object and a emotion icon/////////////////
             cal = c;
             emotion_count=e;
+            Year = cal.get(Calendar.YEAR);
             Month = cal.get(Calendar.MONTH)+1;
             Date = cal.get(Calendar.DATE);
             hr = cal.get(Calendar.HOUR_OF_DAY);
@@ -49,7 +51,9 @@ public class emotion_node {
         return hr;
     }
 
-
+    public int getYear() {
+        return Year;
+    }
 
     public int getMin() {
         return min;
