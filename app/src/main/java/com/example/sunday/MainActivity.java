@@ -25,20 +25,29 @@ public class MainActivity extends AppCompatActivity {
     int Slide_in_animation;
     int Slide_out_animation;
     int fragment_page_count;
+    SharedPreferences sp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sp = this.getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
         BottomNavigationView BOTNAVVIEW = findViewById(R.id.bottomNavigationView);
         BOTNAVVIEW.setOnNavigationItemSelectedListener(bnavlistener);
         selectedfragment = lightbulb_fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.ButtonNav_container, selectedfragment).commit();
         fragment_page_count = 2;
 
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        sp.edit().putBoolean("mainact_ondestroy_was_called",true).commit();
+        super.onDestroy();
 
     }
 

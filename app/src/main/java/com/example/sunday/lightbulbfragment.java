@@ -1,5 +1,6 @@
 package com.example.sunday;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Build;
@@ -32,8 +34,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +58,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Timer;
+
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.WRITE_CONTACTS;
 
 public class lightbulbfragment extends Fragment {
     private RecyclerView lightbulb_recycleview;
@@ -135,6 +142,21 @@ public class lightbulbfragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_lightbulb, container, false);
+
+
+
+        //////////////////////////bind to service///////////////////////
+        Intent intent = new Intent(this.getContext(),background_service.class);
+        sp = getActivity().getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
+        if(!sp.contains("Notification_onoroff")){
+            sp.edit().putBoolean("Notification_onoroff",true).commit();
+        }
+        latency_lightfrag = sp.getInt("Latency", 0);
+        intent.putExtra("Latency", latency_lightfrag);
+        this.getActivity().bindService(intent,mconnection,Context.BIND_AUTO_CREATE);
+        is_service_bounded_lightfrag = true;
+
+
         //////////////////initial check////////////////////////////
         sqlitehelper = new dbhelper(this.getActivity());
         recycle_linkedlist = sqlitehelper.view_data();
@@ -142,14 +164,6 @@ public class lightbulbfragment extends Fragment {
         /////////////////////////////stop the service////////////////////
         Intent stop_intent = new Intent(this.getActivity(),background_service.class);
         this.getActivity().stopService(stop_intent);
-
-        //////////////////////////bind to service///////////////////////
-        Intent intent = new Intent(this.getContext(),background_service.class);
-        sp = getActivity().getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
-        latency_lightfrag = sp.getInt("Latency", 0);
-        intent.putExtra("Latency", latency_lightfrag);
-        this.getActivity().bindService(intent,mconnection,Context.BIND_AUTO_CREATE);
-        is_service_bounded_lightfrag = true;
 
 
         ////////////////////////register receiver/////////////////////
@@ -189,10 +203,8 @@ public class lightbulbfragment extends Fragment {
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_default);
         }else{
         if(sp.getInt("latest_emotion_count",0)==1){
-            Log.d("statustest", "1 ");
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_good);
         }else if(sp.getInt("latest_emotion_count",0)==2){
-            Log.d("statustest", "2 ");
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_bad_painted);
         }}
 
@@ -209,10 +221,22 @@ public class lightbulbfragment extends Fragment {
         add_button.setOnClickListener(listen_2);
         add_button.setEnabled(sp.getBoolean("Emotion_ready",true));
 
+        ///////////////////check when emotion is not ready but countdown is not on///////////////////
+
+        if(sp.getBoolean("mainact_ondestroy_was_called",false)==true){
+            add_button.setEnabled(true);
+            light_imagebutton.setEnabled(true);
+            light_imagebutton.setBackgroundResource(R.drawable.lightbulb_default);
+            lightbulb_icon_count=0;
+            is_emotion_ready_lightfrag=true;
+            Toast.makeText(this.getContext(),"Please Keep Sunday Opened",Toast.LENGTH_LONG).show();
+            sp.edit().putBoolean("mainact_ondestroy_was_called",false).commit();
+        }
+
         return v;
     }
 
-    public void emotion_changes() {
+    private void emotion_changes() {
         if (lightbulb_icon_count == 2) {
             lightbulb_icon_count = 0;
         }
@@ -225,7 +249,7 @@ public class lightbulbfragment extends Fragment {
         }
     }
 
-    public void add_emotion_element() {
+    private void add_emotion_element() {
         Calendar calen = Calendar.getInstance();
         SharedPreferences.Editor speditor= sp.edit();
 
@@ -265,7 +289,10 @@ public class lightbulbfragment extends Fragment {
 
 
 
+
+
     }
+
     ////////////////////////////////////recycle view adapter!!!////////////////////////////////////////////
     class lightbulb_adapter extends RecyclerView.Adapter<lightbulb_adapter.lightbulb_viewholder> {
         SimpleDateFormat element_format = new SimpleDateFormat("HH:mm");
