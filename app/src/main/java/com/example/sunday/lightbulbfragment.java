@@ -80,11 +80,7 @@ public class lightbulbfragment extends Fragment {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             background_service.localbinder binder = (background_service.localbinder)service;
-            //把argument裡面這一個IBinder的物件還原為剛剛在bindService class裡面製作的local binder class
-            //然後剛剛localbinder class裡面有唯一的getService() method
-            //此method回傳我剛剛寫的service
             currentservice = binder.getService();
-            //這裡currentservice的declaration已經被定義在外面了 所以整個Mainactivity class都可以使用這個currentservice裡面的東西
             is_service_bounded_lightfrag = true;
 
         }
@@ -143,8 +139,6 @@ public class lightbulbfragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_lightbulb, container, false);
 
-
-
         //////////////////////////bind to service///////////////////////
         Intent intent = new Intent(this.getContext(),background_service.class);
         sp = getActivity().getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
@@ -199,6 +193,7 @@ public class lightbulbfragment extends Fragment {
         light_imagebutton.setOnClickListener(listen_1);
         light_imagebutton.setEnabled(sp.getBoolean("Emotion_ready",true));
 
+
         if(sp.getBoolean("Emotion_ready",true)){
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_default);
         }else{
@@ -222,7 +217,6 @@ public class lightbulbfragment extends Fragment {
         add_button.setEnabled(sp.getBoolean("Emotion_ready",true));
 
         ///////////////////check when emotion is not ready but countdown is not on///////////////////
-
         if(sp.getBoolean("mainact_ondestroy_was_called",false)==true){
             add_button.setEnabled(true);
             light_imagebutton.setEnabled(true);

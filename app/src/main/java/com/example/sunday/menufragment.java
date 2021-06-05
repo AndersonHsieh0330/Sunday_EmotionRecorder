@@ -102,11 +102,7 @@ public class menufragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 speditor = sp.edit();
-                if(isChecked){
-                    speditor.putBoolean("Notification_onoroff", true);
-                }else{
-                    speditor.putBoolean("Notification_onoroff", false);
-                }
+                speditor.putBoolean("Notification_onoroff", isChecked);
                 speditor.commit();
             }
         });

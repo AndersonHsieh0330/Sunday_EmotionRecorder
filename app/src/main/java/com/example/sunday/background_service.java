@@ -22,37 +22,29 @@ import java.util.TimerTask;
 
 public class background_service extends Service {
     private NotificationManagerCompat notificationManager;
-    private int notificationmanager_id = 1;
-    private boolean is_service_bounded_service;//keep track in both lightbulbfragment and service
-    private boolean is_emotion_ready_service;//keep track in both lightbulbfragment and service
+    private final int notificationmanager_id = 1;
+    private boolean is_service_bounded_service;//status tracking
+    private boolean is_emotion_ready_service;//status tracking
     private int current_count_down;
     private SharedPreferences sp;
     private SharedPreferences.Editor speditor;
-    public boolean isIs_emotion_ready_service() {
-        return is_emotion_ready_service;
-    }
-    public int getCurrent_count_down() {
-        return current_count_down;
-    }
 
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if("emotion_notready_from_notification".equals(intent.getAction())){
-
-                if(intent.getBooleanExtra("Notification_pressed",false)){
+            if ("emotion_notready_from_notification".equals(intent.getAction())) {
+                if (intent.getBooleanExtra("Notification_pressed", false)) {
                     SharedPreferences sp = context.getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
                     cooldown_cycle(sp.getInt("Latency", 0));
-
                 }
             }
         }
     };
 
     private final IBinder mybinder = new localbinder();
-    public class localbinder extends Binder{
-        background_service getService(){
+    public class localbinder extends Binder {
+        background_service getService() {
             return background_service.this;
         }
     }
@@ -61,18 +53,13 @@ public class background_service extends Service {
     public void onCreate() {
         super.onCreate();
         sp = getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
-        speditor= sp.edit();
+        speditor = sp.edit();
         notificationManager = NotificationManagerCompat.from(this);
 
-        IntentFilter filter= new IntentFilter("emotion_notready_from_notification");
-        registerReceiver(broadcastReceiver,filter);
+        IntentFilter filter = new IntentFilter("emotion_notready_from_notification");
+        registerReceiver(broadcastReceiver, filter);
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -83,7 +70,6 @@ public class background_service extends Service {
 
     @Override
     public void onDestroy() {
-
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
@@ -95,35 +81,30 @@ public class background_service extends Service {
         return super.onUnbind(intent);
     }
 
-    public void cooldown_cycle(int latency){
+    public void cooldown_cycle(int latency) {
         is_emotion_ready_service = false;
-        current_count_down = 5000;
 
-        CountDownTimer countDownTimer = new CountDownTimer(15000,1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(latency, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                current_count_down = current_count_down -1000;
-//                Intent broadcast = new Intent();
-//                broadcast.setAction("emotion_actionfilter");
-//                broadcast.putExtra("emotion_ready",false);
-//                sendBroadcast(broadcast);
-                speditor.putBoolean("Emotion_ready",false);
+                speditor.putBoolean("Emotion_ready", false);
                 speditor.commit();
 
             }
 
             @Override
             public void onFinish() {
+                is_emotion_ready_service = true;
                 Intent intent = new Intent();
                 intent.setAction("emotion_actionfilter");
-                intent.putExtra("emotion_ready",true);
+                intent.putExtra("emotion_ready", true);
                 sendBroadcast(intent);
-                is_emotion_ready_service = true;
 
-                if(sp.getBoolean("Notification_onoroff",false)){
+                if (sp.getBoolean("Notification_onoroff", false)) {
                     send_notifications();
                 }
-                speditor.putBoolean("Emotion_ready",true);
+
+                speditor.putBoolean("Emotion_ready", true);
                 speditor.commit();
             }
         };
@@ -131,19 +112,17 @@ public class background_service extends Service {
         countDownTimer.start();
     }
 
-    public void send_notifications(){
+    public void send_notifications() {
         Intent notification_intent = new Intent(this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notification_intent,0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notification_intent, 0);
 
-        Intent broadcast_intent_happy = new Intent(this,Notification_receiver_happy.class);
+        Intent broadcast_intent_happy = new Intent(this, Notification_receiver_happy.class);
         broadcast_intent_happy.putExtra("emotion", 1);
-        PendingIntent action_intent_happy = PendingIntent.getBroadcast(this,0,broadcast_intent_happy,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent action_intent_happy = PendingIntent.getBroadcast(this, 0, broadcast_intent_happy, PendingIntent.FLAG_ONE_SHOT);
 
-        Intent broadcast_intent_sad = new Intent(this,Notification_receiver_happy.class);
+        Intent broadcast_intent_sad = new Intent(this, Notification_receiver_happy.class);
         broadcast_intent_sad.putExtra("emotion", 2);
-        PendingIntent action_intent_sad = PendingIntent.getBroadcast(this,1,broadcast_intent_sad,PendingIntent.FLAG_ONE_SHOT);
-        //flag decides what happen when we recreate this pendingintent with a new intent
-
+        PendingIntent action_intent_sad = PendingIntent.getBroadcast(this, 1, broadcast_intent_sad, PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new NotificationCompat.Builder(this, notification_channel.noti_channel_ID)
                 .setSmallIcon(R.drawable.lightbulb_default)
@@ -152,10 +131,10 @@ public class background_service extends Service {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(contentIntent)
                 .addAction(R.drawable.lightbulb_bad_painted, "Bad..", action_intent_sad)
-                .addAction(R.drawable.lightbulb_default,"Good!", action_intent_happy)
+                .addAction(R.drawable.lightbulb_default, "Good!", action_intent_happy)
                 .build();
 
-        notificationManager.notify(notificationmanager_id,notification);
+        notificationManager.notify(notificationmanager_id, notification);
 
     }
 

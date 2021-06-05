@@ -9,13 +9,13 @@ import java.util.Calendar;
 
 public class emotion_node {
 
-        private Calendar cal;
-        private int Year;
-        private int Month;
-        private int Date;
-        private int hr;
-        private int min;
-        private int emotion_count;
+        private final Calendar cal;
+        private final int Year;
+        private final int Month;
+        private final int Date;
+        private final int hr;
+        private final int min;
+        private final int emotion_count;
 
         public emotion_node(Calendar c, int e){
             ////////////when creating a node, user only needs to input a calendar object and a emotion icon/////////////////

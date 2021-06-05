@@ -14,7 +14,7 @@ public class credits_class extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         super.onCreateView(inflater, container, savedInstanceState);
-         return inflater.inflate(R.layout.credits_dialogfragment,container,false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.credits_dialogfragment, container, false);
     }
 }

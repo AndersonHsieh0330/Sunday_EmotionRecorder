@@ -12,7 +12,7 @@ import java.util.Calendar;
 
 public class Notification_receiver_happy extends BroadcastReceiver {
     dbhelper sqlitehelper;
-    private int notificationmanager_id = 1;//this is the id when I did notificationmanager.notify(id)
+    private final int notificationmanager_id = 1;//this is the id when I did notificationmanager.notify(id)
     private NotificationManagerCompat notificationManager;
     @Override
     public void onReceive(Context context, Intent intent) {

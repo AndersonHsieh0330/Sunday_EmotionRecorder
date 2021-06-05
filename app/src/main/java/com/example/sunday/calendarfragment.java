@@ -29,45 +29,32 @@ public class calendarfragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
         sqlitehelper = new dbhelper(this.getActivity());
 
-        PieChart mPieChart = (PieChart) v.findViewById(R.id.piechart);
+        PieChart mPieChart = v.findViewById(R.id.piechart);
         Calendar today = Calendar.getInstance();
         int today_year = today.get(Calendar.YEAR);
         int today_month = today.get(Calendar.MONTH);
         int today_dayofmonth = today.get(Calendar.DAY_OF_MONTH);
-        if((0!=sqlitehelper.get_date_happyemo(today_year,today_month,today_dayofmonth))||(0!=sqlitehelper.get_date_unhappyemo(today_year,today_month,today_dayofmonth))) {
-            mPieChart.addPieSlice(new PieModel("Happy!", sqlitehelper.get_date_happyemo(today_year,today_month,today_dayofmonth), Color.parseColor("#FEDB41")));
-            mPieChart.addPieSlice(new PieModel("UnHappy:(", sqlitehelper.get_date_unhappyemo(today_year,today_month,today_dayofmonth), Color.parseColor("#FF0000")));
-
-        }else{
+        if ((0 != sqlitehelper.get_date_happyemo(today_year, today_month, today_dayofmonth)) || (0 != sqlitehelper.get_date_unhappyemo(today_year, today_month, today_dayofmonth))) {
+            mPieChart.addPieSlice(new PieModel("Happy!", sqlitehelper.get_date_happyemo(today_year, today_month, today_dayofmonth), Color.parseColor("#FEDB41")));
+            mPieChart.addPieSlice(new PieModel("UnHappy:(", sqlitehelper.get_date_unhappyemo(today_year, today_month, today_dayofmonth), Color.parseColor("#FF0000")));
+        } else {
             mPieChart.addPieSlice(new PieModel("Select a Date", 0, Color.parseColor("#9E9E9E")));
-
         }
-        calendarView = (CalendarView) v.findViewById(R.id.calendarView);
+
+        calendarView = v.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
                 mPieChart.clearChart();
-
-                if((0!=sqlitehelper.get_date_happyemo(year, month, dayOfMonth))||(0!=sqlitehelper.get_date_unhappyemo(year, month, dayOfMonth))) {
+                if ((0 != sqlitehelper.get_date_happyemo(year, month, dayOfMonth)) || (0 != sqlitehelper.get_date_unhappyemo(year, month, dayOfMonth))) {
                     mPieChart.addPieSlice(new PieModel("Happy!", sqlitehelper.get_date_happyemo(year, month, dayOfMonth), Color.parseColor("#FEDB41")));
                     mPieChart.addPieSlice(new PieModel("UnHappy:(", sqlitehelper.get_date_unhappyemo(year, month, dayOfMonth), Color.parseColor("#FF0000")));
-
-                }else{
+                } else {
                     mPieChart.addPieSlice(new PieModel("No Data For This Date", 0, Color.parseColor("#FFFFFF")));
-
                 }
-
                 mPieChart.startAnimation();
-
-
             }
-
-
         });
-
-
         return v;
-
     }
 }

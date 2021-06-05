@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -46,9 +47,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
         sp.edit().putBoolean("mainact_ondestroy_was_called",true).commit();
         super.onDestroy();
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this,"Closing Sunday App will pause the countdown function, please keep app in the background.", Toast.LENGTH_LONG).show();
     }
 
     public BottomNavigationView.OnNavigationItemSelectedListener bnavlistener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -88,9 +96,6 @@ public class MainActivity extends AppCompatActivity {
             /////////////////////.setCustomAnimations(Slide_in_animation, Slide_out_animation)////////////////////////
             /////////////////////temporary removed////////////////////
             fragmentManager.beginTransaction().replace(R.id.ButtonNav_container, selectedfragment, "currentfrag").commit();
-
-            Log.d("animation", selectedfragment + String.valueOf(selectedfragment.isVisible()));
-
 
             return true;
 
