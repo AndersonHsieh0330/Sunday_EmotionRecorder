@@ -25,7 +25,6 @@ public class background_service extends Service {
     private final int notificationmanager_id = 1;
     private boolean is_service_bounded_service;//status tracking
     private boolean is_emotion_ready_service;//status tracking
-    private int current_count_down;
     private SharedPreferences sp;
     private SharedPreferences.Editor speditor;
 
