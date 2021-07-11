@@ -27,8 +27,6 @@ public class background_service extends Service {
     private boolean is_emotion_ready_service;//status tracking
     private SharedPreferences sp;
     private SharedPreferences.Editor speditor;
-
-
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
