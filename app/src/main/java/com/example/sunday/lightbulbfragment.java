@@ -76,6 +76,7 @@ public class lightbulbfragment extends Fragment {
     private background_service currentservice;
     private boolean is_service_bounded_lightfrag;//keep track in both lightbulbfragment and service
     private boolean is_emotion_ready_lightfrag;//keep track in both lightbulbfragment and service
+
     ServiceConnection mconnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -94,7 +95,7 @@ public class lightbulbfragment extends Fragment {
     BroadcastReceiver messagereceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if("emotion_actionfilter".equals(intent.getAction())){
+            if(Notification_receiver_happy.EMOTION_ACTION_FILTER.equals(intent.getAction())){
                 if(intent.getBooleanExtra("emotion_ready",false)){
                     is_emotion_ready_lightfrag = true;
                     light_imagebutton.setEnabled(true);
@@ -217,14 +218,14 @@ public class lightbulbfragment extends Fragment {
         add_button.setEnabled(sp.getBoolean("Emotion_ready",true));
 
         ///////////////////check when emotion is not ready but countdown is not on///////////////////
-        if(sp.getBoolean("mainact_ondestroy_was_called",false)==true){
+        if(sp.getBoolean(MainActivity.MAINACTIVITY_DESTROYED_TAG,false)==true){
             add_button.setEnabled(true);
             light_imagebutton.setEnabled(true);
             light_imagebutton.setBackgroundResource(R.drawable.lightbulb_default);
             lightbulb_icon_count=0;
             is_emotion_ready_lightfrag=true;
             Toast.makeText(this.getContext(),"Please Keep Sunday Opened",Toast.LENGTH_LONG).show();
-            sp.edit().putBoolean("mainact_ondestroy_was_called",false).commit();
+            sp.edit().putBoolean(MainActivity.MAINACTIVITY_DESTROYED_TAG,false).commit();
         }
 
         return v;

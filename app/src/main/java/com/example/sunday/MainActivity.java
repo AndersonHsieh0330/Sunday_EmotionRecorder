@@ -23,32 +23,38 @@ public class MainActivity extends AppCompatActivity {
     Fragment menu_fragment = new menufragment();
     FragmentManager fragmentManager = getSupportFragmentManager();
     Fragment selectedfragment;
-    int Slide_in_animation;
-    int Slide_out_animation;
     int fragment_page_count;
     SharedPreferences sp;
+    public static final String MAINACTIVITY_DESTROYED_TAG = "mainact_ondestroy_was_called";
+    public static final String USER_SETTING_TAG = "user_setting_sharepreference";
+    public static final String NOTIFICATION_STATUS_SHAREPREFERENCE_TAG = "Notification_onoroff";
+    public static final String DIALOGFRAGMENT_TAG_INSTRUCTIONS ="Instruction fragment";
+    public static final String DIALOGFRAGMENT_TAG_CREDITS = "credits dialogfragment";
+    public static final String DIALOGFRAGMENT_TAG_TERMSNPOLICIES ="terms_policies dialogfragment";
+    public static final String DIALOGFRAGMENT_TAG_LATENCY ="latency_description";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sp = this.getApplicationContext().getSharedPreferences(USER_SETTING_TAG, Context.MODE_PRIVATE);
+        Define_BottonNavView();
 
-        sp = this.getApplicationContext().getSharedPreferences("user_setting_sharepreference", Context.MODE_PRIVATE);
+
+    }
+    private void Define_BottonNavView(){
         BottomNavigationView BOTNAVVIEW = findViewById(R.id.bottomNavigationView);
         BOTNAVVIEW.setOnNavigationItemSelectedListener(bnavlistener);
         selectedfragment = lightbulb_fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.ButtonNav_container, selectedfragment).commit();
         fragment_page_count = 2;
-
-
-
     }
 
     @Override
     protected void onDestroy() {
-
-        sp.edit().putBoolean("mainact_ondestroy_was_called",true).commit();
+        sp.edit().putBoolean(MAINACTIVITY_DESTROYED_TAG,true).commit();
         super.onDestroy();
 
     }
@@ -56,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this,"Closing Sunday App will pause the countdown function, please keep app in the background.", Toast.LENGTH_LONG).show();
     }
 
     public BottomNavigationView.OnNavigationItemSelectedListener bnavlistener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,36 +72,15 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.lightbulb_icon:
                     selectedfragment = lightbulb_fragment;
-//                    if (fragment_page_count < 2) {
-//                        Slide_in_animation = R.anim.slide_in_right;
-//                        Slide_out_animation = R.anim.slide_out_left;
-//                    } else if (fragment_page_count > 2) {
-//                        Slide_in_animation = R.anim.slide_in_left;
-//                        Slide_out_animation = R.anim.slide_out_right;
-//                    } else {
-//                        Log.d("animation", "first error");
-//                    }
-//                    fragment_page_count = 2;
-
                     break;
                 case R.id.calendar_icon:
                     selectedfragment = calendar_fragment;
-//                    Slide_in_animation = R.anim.slide_in_right;
-//                    Slide_out_animation = R.anim.slide_out_left;
-//                    fragment_page_count = 3;
                     break;
                 case R.id.menu_icon:
                     selectedfragment = menu_fragment;
-//                    Slide_in_animation = R.anim.slide_in_left;
-//                    Slide_out_animation = R.anim.slide_out_right;
-//                    fragment_page_count = 1;
                     break;
             }
-
-            /////////////////////.setCustomAnimations(Slide_in_animation, Slide_out_animation)////////////////////////
-            /////////////////////temporary removed////////////////////
             fragmentManager.beginTransaction().replace(R.id.ButtonNav_container, selectedfragment, "currentfrag").commit();
-
             return true;
 
 
